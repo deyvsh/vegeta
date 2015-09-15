@@ -1,3 +1,7 @@
+This is just a fork, you want tsenart/vegeta.
+
+--
+
 # Vegeta [![Build Status](https://secure.travis-ci.org/tsenart/vegeta.png)](http://travis-ci.org/tsenart/vegeta)
 
 Vegeta is a versatile HTTP load testing tool built out of a need to drill
