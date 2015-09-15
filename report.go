@@ -9,7 +9,7 @@ import (
 	"sort"
 	"strings"
 
-	vegeta "github.com/tsenart/vegeta/lib"
+	vegeta "github.com/deyvsh/vegeta/lib"
 )
 
 func reportCmd() command {

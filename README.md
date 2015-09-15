@@ -358,7 +358,7 @@ import (
   "time"
   "fmt"
 
-  vegeta "github.com/tsenart/vegeta/lib"
+  vegeta "github.com/deyvsh/vegeta/lib"
 )
 
 func main() {
