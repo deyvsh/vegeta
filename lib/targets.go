@@ -13,6 +13,8 @@ import (
 	"strings"
 	"sync"
 	"sync/atomic"
+	"time"
+	"strconv"
 )
 
 // Target is an HTTP request blueprint.
@@ -26,6 +28,12 @@ type Target struct {
 // Request creates an *http.Request out of Target and returns it along with an
 // error in case of failure.
 func (t *Target) Request() (*http.Request, error) {
+	// Dave's hack: replace tokens in body with unix times
+	timeClipStarted := time.Now().UnixNano() / 1000000 - 60000
+	t.Body = bytes.Replace(t.Body, []byte("__thentime__"), []byte(strconv.Itoa(int(timeClipStarted))), 1)
+	timeNow := time.Now().UnixNano() / 1000000
+	t.Body = bytes.Replace(t.Body, []byte("__nowtime__"), []byte(strconv.Itoa(int(timeNow))), 2)
+
 	req, err := http.NewRequest(t.Method, t.URL, bytes.NewBuffer(t.Body))
 	if err != nil {
 		return nil, err
