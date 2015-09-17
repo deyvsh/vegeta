@@ -29,10 +29,15 @@ type Target struct {
 // error in case of failure.
 func (t *Target) Request() (*http.Request, error) {
 	// Dave's hack: replace tokens in body with unix times
-	timeClipStarted := time.Now().UnixNano() / 1000000 - 60000
-	t.Body = bytes.Replace(t.Body, []byte("__thentime__"), []byte(strconv.Itoa(int(timeClipStarted))), 1)
-	timeNow := time.Now().UnixNano() / 1000000
-	t.Body = bytes.Replace(t.Body, []byte("__nowtime__"), []byte(strconv.Itoa(int(timeNow))), 2)
+	miliTimeClipStarted := time.Now().UnixNano() / 1000000 - 60000
+	t.Body = bytes.Replace(t.Body, []byte("__miliTimeClipStarted__"), []byte(strconv.Itoa(int(miliTimeClipStarted))), 1)
+	nanoTimeNow := time.Now().UnixNano()
+	miliTimeClipEnded := nanoTimeNow / 1000000
+	t.Body = bytes.Replace(t.Body, []byte("__miliTimeClipEnded__"), []byte(strconv.Itoa(int(miliTimeClipEnded))), 2)
+	microTimeNowString := strconv.Itoa(int(nanoTimeNow / 1000))
+	splitPoint := len(microTimeNowString)-6
+	microTimeForStill := fmt.Sprint(microTimeNowString[:splitPoint], ".", microTimeNowString[splitPoint:])
+	t.Body = bytes.Replace(t.Body, []byte("__microTimeForStill__"), []byte(microTimeForStill), 1)
 
 	req, err := http.NewRequest(t.Method, t.URL, bytes.NewBuffer(t.Body))
 	if err != nil {
